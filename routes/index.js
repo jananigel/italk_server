@@ -1,9 +1,23 @@
-var express = require('express');
-var router = express.Router();
+const express = require('express');
+const router = express.Router();
 
-/* GET home page. */
-router.get('/', function(req, res, next) {
-  res.send('Application is running');
+const { version, name } = require('../package.json');
+
+router.get('/', (req, res) => {
+  res.json({
+    name,
+    version,
+    status: 'online',
+    uptime: process.uptime()
+  });
+});
+
+router.get('/health', (req, res) => {
+  res.json({
+    status: 'ok',
+    uptime: process.uptime(),
+    timestamp: new Date().toISOString()
+  });
 });
 
 module.exports = router;
