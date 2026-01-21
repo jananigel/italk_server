@@ -10,6 +10,7 @@ function attachSocketServer(server) {
   });
 
   io.on('connection', (socket) => {
+    console.log('connection');
     socket.on('add user', (username) => {
       const result = chatRoom.addUser(username, socket.id);
       if (!result.success) {
