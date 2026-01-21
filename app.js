@@ -18,22 +18,38 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
+app.get('/', (req, res) => {
+  res.json({
+    status: 'italk backend running',
+    api: '/api'
+  });
+});
+
 app.use('/api', indexRouter);
-app.use('/users', usersRouter);
+app.use('/api', usersRouter);
 
 // catch 404 and forward to error handler
-app.use(function(req, res, next) {
+app.use((req, res, next) => {
+  const error = new Error('Not Found');
+  error.status = 404;
   next(createError(404));
 });
 
 // error handler
-app.use(function(err, req, res, next) {
+app.use((err, req, res, next) => {
+  const status = err.status || 500;
+
   // set locals, only providing error in development
   res.locals.message = err.message;
   res.locals.error = req.app.get('env') === 'development' ? err : {};
 
   // render the error page
-  res.status(err.status || 500);
+  res.status(status).json({
+    error: {
+      message: err.message,
+      status,
+    }
+  });
   res.render('error');
 });
 
