@@ -3,7 +3,9 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {
-    "start": "node ./src/bin/www"
+    "start": "node src/bin/www",
+    "serve": "node src/server.js",
+    "dev": "nodemon src/server.js"
   },
   "dependencies": {
     "cookie-parser": "~1.4.4",
