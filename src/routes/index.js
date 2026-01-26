@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
 
-const { version, name } = require('../package.json');
+const { version, name } = require('../../package.json');
 
 router.get('/', (req, res) => {
   res.json({
