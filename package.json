@@ -2,6 +2,7 @@
   "name": "italk-server",
   "version": "0.0.0",
   "private": true,
+  "type": "module",
   "scripts": {
     "start": "node src/bin/www",
     "serve": "node src/server.js",

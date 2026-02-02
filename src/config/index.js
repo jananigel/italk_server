@@ -13,7 +13,7 @@ function parseOrigins(value) {
 
 const corsOrigins = parseOrigins(process.env.CORS_ORIGINS);
 
-module.exports = {
+export const config = {
   port: process.env.PORT || 8000,
   cors: {
     origin: corsOrigins,

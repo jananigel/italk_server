@@ -1,15 +1,21 @@
-var createError = require('http-errors');
-var express = require('express');
-var path = require('path');
-var cookieParser = require('cookie-parser');
-var logger = require('morgan');
+import express from 'express';
+import path from 'path';
+import cookieParser from 'cookie-parser';
+import logger from 'morgan';
 
-var indexRouter = require('./routes/index');
-var usersRouter = require('./routes/users');
-const cors = require('cors');
-const config = require('./config');
+import indexRouter from './routes/index.js';
+import usersRouter from './routes/users.js';
 
-var app = express();
+import cors from 'cors';
+import { config } from './config/index.js';
+import { errorHandler } from './middleware/errorHandler.js';
+import { AppError } from './utils/AppError.js';
+
+import { fileURLToPath } from 'url';
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+
+const app = express();
 
 app.use(cors(config.cors));
 app.use(logger('dev'));
@@ -28,29 +34,9 @@ app.get('/', (req, res) => {
 app.use('/api', indexRouter);
 app.use('/api', usersRouter);
 
-// catch 404 and forward to error handler
-app.use((req, res, next) => {
-  const error = new Error('Not Found');
-  error.status = 404;
-  next(createError(404));
+app.all('*', (req, res, next) => {
+  next(new AppError(`Can't find ${req.originalUrl} on this server!`, 404));
 });
+app.use(errorHandler);
 
-// error handler
-app.use((err, req, res, next) => {
-  const status = err.status || 500;
-
-  // set locals, only providing error in development
-  res.locals.message = err.message;
-  res.locals.error = req.app.get('env') === 'development' ? err : {};
-
-  // render the error page
-  res.status(status).json({
-    error: {
-      message: err.message,
-      status,
-    }
-  });
-  res.render('error');
-});
-
-module.exports = app;
+export default app;
