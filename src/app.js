@@ -1,4 +1,3 @@
-var createError = require('http-errors');
 var express = require('express');
 var path = require('path');
 var cookieParser = require('cookie-parser');
@@ -8,6 +7,8 @@ var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
 const cors = require('cors');
 const config = require('./config');
+const { errorHandler } = require('./middleware/errorHandler');
+const { AppError } = require('./utils/AppError');
 
 var app = express();
 
@@ -28,29 +29,9 @@ app.get('/', (req, res) => {
 app.use('/api', indexRouter);
 app.use('/api', usersRouter);
 
-// catch 404 and forward to error handler
-app.use((req, res, next) => {
-  const error = new Error('Not Found');
-  error.status = 404;
-  next(createError(404));
+app.all('*', (req, res, next) => {
+  next(new AppError(`Can't find ${req.originalUrl} on this server!`, 404));
 });
-
-// error handler
-app.use((err, req, res, next) => {
-  const status = err.status || 500;
-
-  // set locals, only providing error in development
-  res.locals.message = err.message;
-  res.locals.error = req.app.get('env') === 'development' ? err : {};
-
-  // render the error page
-  res.status(status).json({
-    error: {
-      message: err.message,
-      status,
-    }
-  });
-  res.render('error');
-});
+app.use(errorHandler);
 
 module.exports = app;
