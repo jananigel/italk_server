@@ -1,16 +1,21 @@
-var express = require('express');
-var path = require('path');
-var cookieParser = require('cookie-parser');
-var logger = require('morgan');
+import express from 'express';
+import path from 'path';
+import cookieParser from 'cookie-parser';
+import logger from 'morgan';
 
-var indexRouter = require('./routes/index');
-var usersRouter = require('./routes/users');
-const cors = require('cors');
-const config = require('./config');
-const { errorHandler } = require('./middleware/errorHandler');
-const { AppError } = require('./utils/AppError');
+import indexRouter from './routes/index.js';
+import usersRouter from './routes/users.js';
 
-var app = express();
+import cors from 'cors';
+import { config } from './config/index.js';
+import { errorHandler } from './middleware/errorHandler.js';
+import { AppError } from './utils/AppError.js';
+
+import { fileURLToPath } from 'url';
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+
+const app = express();
 
 app.use(cors(config.cors));
 app.use(logger('dev'));
@@ -34,4 +39,4 @@ app.all('*', (req, res, next) => {
 });
 app.use(errorHandler);
 
-module.exports = app;
+export default app;

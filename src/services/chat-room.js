@@ -72,4 +72,6 @@ class ChatRoom {
   }
 }
 
-module.exports = new ChatRoom();
+const chatRoom = new ChatRoom();
+
+export default chatRoom;
