@@ -1,13 +1,8 @@
 var express = require('express');
 var router = express.Router();
-const chatRoom = require('../services/chat-room');
+const { getUsers } = require('../controllers/UserController');
 
 /* GET users listing. */
-router.get('/users', (req, res) => {
-  res.json({
-    count: chatRoom.count(),
-    users: chatRoom.listUsers()
-  });
-});
+router.get('/users', getUsers);
 
 module.exports = router;
